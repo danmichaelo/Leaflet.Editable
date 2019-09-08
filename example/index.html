@@ -18,9 +18,22 @@
   <div id='map'></div>
 
 <script type="text/javascript">
-var startPoint = [43.1249, 1.254];
-var map = L.map('map', {editable: true}).setView(startPoint, 16),
-    tilelayer = L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {maxZoom: 20, attribution: 'Data \u00a9 <a href="http://www.openstreetmap.org/copyright"> OpenStreetMap Contributors </a> Tiles \u00a9 HOT'}).addTo(map);
+
+    var tileLayer = L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {maxZoom: 20, attribution: 'Data \u00a9 <a href="http://www.openstreetmap.org/copyright"> OpenStreetMap Contributors </a> Tiles \u00a9 HOT'});
+
+    var editLayer = L.layerGroup();
+
+    var startPoint = [43.1249, 1.254];
+
+    var map = L.map('map', {
+      editable: true,
+      layers: [tileLayer, editLayer]
+    }).setView(startPoint, 16);
+
+    L.control.layers(null, {
+      'Background map': tileLayer,
+      'Editing layer': editLayer,
+    }, { collapsed: false }).addTo(map)
 
     L.EditControl = L.Control.extend({
 
@@ -113,7 +126,7 @@ var map = L.map('map', {editable: true}).setView(startPoint, 16),
         [43.1292, 1.256],
         [43.1295, 1.259],
         [43.1291, 1.261]
-    ]).addTo(map);
+    ]).addTo(editLayer);
     line.enableEdit();
     line.on('dblclick', L.DomEvent.stop).on('dblclick', line.toggleEdit);
 
@@ -146,7 +159,7 @@ var map = L.map('map', {editable: true}).setView(startPoint, 16),
           [43.1280, 1.245]
         ]
       ]
-    ]).addTo(map);
+    ]).addTo(editLayer);
     multi.enableEdit();
     multi.on('dblclick', L.DomEvent.stop).on('dblclick', multi.toggleEdit);
     multi.bindPopup('hi!');
@@ -163,18 +176,18 @@ var map = L.map('map', {editable: true}).setView(startPoint, 16),
         [43.1236, 1.261],
         [43.12475, 1.262]
       ]
-    ]).addTo(map);
+    ]).addTo(editLayer);
     poly.enableEdit();
     poly.on('dblclick', L.DomEvent.stop).on('dblclick', poly.toggleEdit);
 
     var rec = L.rectangle([
         [43.1235, 1.255],
         [43.1215, 1.259]
-    ]).addTo(map);
+    ]).addTo(editLayer);
     rec.enableEdit();
     rec.on('dblclick', L.DomEvent.stop).on('dblclick', rec.toggleEdit);
 
-    var circle = L.circle([43.1220, 1.250], {radius: 100}).addTo(map);
+    var circle = L.circle([43.1220, 1.250], {radius: 100}).addTo(editLayer);
     circle.enableEdit();
     circle.on('dblclick', L.DomEvent.stop).on('dblclick', circle.toggleEdit);
 
