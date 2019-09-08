@@ -17,12 +17,16 @@
 </head>
 <body>
     <button onclick="toggleLayer()">Toggle layer</button>
+    <button onclick="disableEdit()">Disable edit</button>
+    <button onclick="enableEdit()">Enable edit</button>
   <div id='map'></div>
 
 <script type="text/javascript">
 var startPoint = [43.1249, 1.254];
 var map = L.map('map', {editable: true}).setView(startPoint, 16),
     tilelayer = L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {maxZoom: 20, attribution: 'Data \u00a9 <a href="http://www.openstreetmap.org/copyright"> OpenStreetMap Contributors </a> | Use Ctrl-Z to undo / Ctrl-Shift-Z to redo'}).addTo(map);
+
+
 
 var poly0 = L.polygon([
       [
@@ -36,12 +40,28 @@ var poly0 = L.polygon([
     ]).addTo(map);
     poly0.enableEdit();
 
+poly0.on('click', () => { console.log('click') })
+poly0.on('mousedown', () => { console.log('mousedown') })
+poly0.on('dragstart', () => { console.log('dragstart') })
+poly0.on('editable:dragstart', () => { console.log('editable:dragstart') })
+poly0.on('editable:dragend', () => { console.log('editable:dragstart') })
+poly0.on('editable:vertex:dragstart', () => { console.log('editable:vertex:dragstart') })
+poly0.on('editable:vertex:dragend', () => { console.log('editable:vertex:dragstart') })
+
+
 function toggleLayer() {
     if (map.hasLayer(poly0)) {
         map.removeLayer(poly0)
     } else {
         map.addLayer(poly0)
     }
+}
+
+function disableEdit() {
+    poly0.disableEdit()
+}
+function enableEdit() {
+    poly0.enableEdit()
 }
 </script>
 </body>
