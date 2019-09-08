@@ -179,6 +179,33 @@ describe('L.PolylineEditor', function() {
             assert.notOk(layer.editEnabled());
         });
 
+        it('should be draggable after re-enabling', function (done) {
+            var latlngs = [p2ll(100, 100), p2ll(100, 200)],
+                layer = L.polyline(latlngs).addTo(this.map),
+                before = layer._latlngs[1].lat;
+            layer.enableEdit();
+            layer.disableEdit();
+            layer.enableEdit();
+            happen.drag(100, 130, 120, 150, function () {
+                assert.notEqual(before, layer._latlngs[1].lat);
+                layer.remove();
+                done();
+            });
+        });
+
+        it('should be draggable after re-adding', function (done) {
+            var latlngs = [p2ll(100, 100), p2ll(100, 200)],
+                layer = L.polyline(latlngs).addTo(this.map),
+                before = layer._latlngs[1].lat;
+            layer.enableEdit();
+            this.map.removeLayer(layer);
+            this.map.addLayer(layer);
+            happen.drag(100, 130, 120, 150, function () {
+                assert.notEqual(before, layer._latlngs[1].lat);
+                layer.remove();
+                done();
+            });
+        });
     });
 
     describe('#enable()', function () {
