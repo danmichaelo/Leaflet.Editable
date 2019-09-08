@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <meta name="viewport" content="width=device-width,height=device-height, user-scalable=no" />
+  <title>Leaflet.Editable #192 minimal example</title>
+  <link rel="stylesheet" href="https://npmcdn.com/leaflet@1.2.0/dist/leaflet.css" />
+  <script src="https://npmcdn.com/leaflet@1.2.0/dist/leaflet.js"></script>
+  <script src="https://npmcdn.com/leaflet.path.drag/src/Path.Drag.js"></script>
+  <script src="../src/Leaflet.Editable.js"></script>
+
+  <style type='text/css'>
+      body { margin:0; padding:0; }
+      button { font-size: 200%; }
+      #map { position:absolute; top:50px; bottom:0; right: 0; left: 0; width:100%; }
+</style>
+</head>
+<body>
+    <button onclick="toggleLayer()">Toggle layer</button>
+  <div id='map'></div>
+
+<script type="text/javascript">
+var startPoint = [43.1249, 1.254];
+var map = L.map('map', {editable: true}).setView(startPoint, 16),
+    tilelayer = L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {maxZoom: 20, attribution: 'Data \u00a9 <a href="http://www.openstreetmap.org/copyright"> OpenStreetMap Contributors </a> | Use Ctrl-Z to undo / Ctrl-Shift-Z to redo'}).addTo(map);
+
+var poly0 = L.polygon([
+      [
+        [
+          [43.1269, 1.246],
+          [43.126, 1.252],
+          [43.1282, 1.255],
+          [43.1280, 1.245]
+        ]
+      ]
+    ]).addTo(map);
+    poly0.enableEdit();
+
+function toggleLayer() {
+    if (map.hasLayer(poly0)) {
+        map.removeLayer(poly0)
+    } else {
+        map.addLayer(poly0)
+    }
+}
+</script>
+</body>
+</html>
